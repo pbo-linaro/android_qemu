@@ -1,0 +1,8 @@
+/x64
+/arm64
+perf.data*
+*.txt
+*.log
+/FlameGraph
+*zip
+*tar.gz
