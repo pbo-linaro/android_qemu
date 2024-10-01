@@ -4,20 +4,26 @@ set -euo pipefail
 
 log()
 {
-    echo "$@" 1>&2
+    echo "$@"
 }
 
 qemu=/home/user/.work/qemu/build/qemu-system-x86_64
-sleep 1
+args="$@"
+if [ "$(echo "$args" | grep version)" != "" ]; then
+    $qemu -version
+    exit 0
+fi
+
 log -------------------------------------------------------
 $qemu --version
 log -------------------------------------------------------
 log "Connect to qemu monitor using: socat -,echo=0,icanon=0 unix-connect:qemu-monitor-socket"
 log -------------------------------------------------------
-args="$(echo $@)"
 args="$(echo "$args" | sed -e 's/accel=kvm/accel=tcg/g' | sed -e 's/,debug-threads=on//') -cpu max -monitor unix:$HOME/qemu-monitor-socket,server,nowait"
 args="$args -smp $SMP,cores=$SMP,threads=1"
+args="$args -plugin /home/user/.work/qemu/build/tests/tcg/plugins/libbb.so -d plugin -D plugin.out"
 log "$qemu $(echo $args | tr ' ' '\n' | sed -e 's/$/ \\/')"
 log -------------------------------------------------------
-perf record -F 300 --call-graph fp -o ~/perf.data $qemu $args
+/usr/bin/time -v perf record -F 300 --call-graph fp -o ~/perf.data $qemu $args
+cat plugin.out
 log -------------------------------------------------------
