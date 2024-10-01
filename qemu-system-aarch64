@@ -7,9 +7,10 @@ log()
     echo "$@"
 }
 
+
 qemu=/home/user/.work/qemu/build/qemu-system-aarch64
 args="$@"
-if [ "$(echo "$args" | grep version)" != "" ]; then
+if [ "$(echo "$args" | grep '^-version')" != "" ]; then
     $qemu -version
     exit 0
 fi
@@ -27,3 +28,4 @@ log -------------------------------------------------------
 /usr/bin/time -v perf record -F 300 --call-graph fp -o ~/perf.data $qemu $args
 cat plugin.out
 log -------------------------------------------------------
+args="$@"
