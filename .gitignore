@@ -3,6 +3,6 @@
 perf.data*
 *.txt
 *.log
-/FlameGraph
 *zip
 *tar.gz
+/qemu-9.1.0
