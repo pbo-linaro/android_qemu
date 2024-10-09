@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -x
 trap "pkill qemu-system; pkill run_cvd" EXIT
 
