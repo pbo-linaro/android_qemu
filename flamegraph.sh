@@ -6,6 +6,6 @@ data=$1
 
 script_dir=$(dirname $(readlink -f $0))
 export PATH=$PATH:$script_dir/FlameGraph
-perf script -i $data | stackcollapse-perf.pl | flamegraph.pl > $data.svg
+perf script -i $data | stackcollapse-perf.pl | flamegraph.pl --title $(basename $data) > $data.svg
 echo "see with:"
 echo "firefox $data.svg"
